@@ -1,6 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
-from src.main import app  # импортируйте ваше приложение из соответствующего модуля
+from src.main import app
 from src.user.models import SexEnum, RoleEnum
 from src.user.schemas import UserCreate
 
