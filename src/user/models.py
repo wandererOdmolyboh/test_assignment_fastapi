@@ -4,6 +4,7 @@ from enum import StrEnum
 from sqlalchemy.orm import relationship
 
 from src.database import Base
+from src.message.models import DBMessage
 from src.user.constant import ENUM_ADMIN, ENUM_MANAGER, ENUM_USER, ENUM_MALE, ENUM_FEMALE
 
 
