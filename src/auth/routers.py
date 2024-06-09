@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from src.auth.oauth2 import create_access_token
-from src.auth.hash_password import verify_password
+from src.auth.utils import verify_password
 from src.dependencies import get_async_session
 from src.user.crud import get_user_by_username
 
@@ -12,7 +12,10 @@ router = APIRouter(tags=["authentication"])
 
 
 @router.post("/login")
-async def get_token(request: OAuth2PasswordRequestForm = Depends(), session: AsyncSession = Depends(get_async_session)):
+async def get_token(
+        request: OAuth2PasswordRequestForm = Depends(),
+        session: AsyncSession = Depends(get_async_session)
+):
     """
     Authenticate a user and generate an access token for them.
 
@@ -28,11 +31,20 @@ async def get_token(request: OAuth2PasswordRequestForm = Depends(), session: Asy
     Raises:
         HTTPException: If the user is not found or the password is incorrect.
     """
-    user = await get_user_by_username(db_session=session, username=request.username)
+    user = await get_user_by_username(
+        db_session=session,
+        username=request.username
+    )
 
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    if not verify_password(plain_password=request.password, hashed_password=user.password):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    if not verify_password(
+            plain_password=request.password,
+            hashed_password=user.password
+    ):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect password")
 
     access_token = create_access_token(payload={"user_id": user.id})

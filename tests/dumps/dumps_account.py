@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.auth import hash_password
+from src.auth.utils import hash_password
 from src.user import crud as user_crud
 from src.user.models import SexEnum, RoleEnum
 from src.user.schemas import UserCreate

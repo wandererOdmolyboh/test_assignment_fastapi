@@ -15,7 +15,10 @@ from src.user.schemas import User
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="/task_2/login")
 
 
-def create_access_token(payload: dict, expires_delta: Optional[timedelta] = None):
+def create_access_token(
+        payload: dict,
+        expires_delta: Optional[timedelta] = None
+):
     to_encode = payload.copy()
     if expires_delta:
         expire = datetime.now() + expires_delta
@@ -41,7 +44,10 @@ async def validate_token(token):
         return None
 
 
-async def get_current_user(token: str = Depends(oauth2_schema), db: AsyncSession = Depends(get_async_session)):
+async def get_current_user(
+        token: str = Depends(oauth2_schema),
+        db: AsyncSession = Depends(get_async_session)
+):
     user_id = await validate_token(token)
     if user_id is None:
         raise HTTPException(
@@ -52,10 +58,13 @@ async def get_current_user(token: str = Depends(oauth2_schema), db: AsyncSession
     else:
         user = await user_crud.get_user_by_id(db, id=user_id)
         if user is None:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(
+                status_code=404,
+                detail="User not found"
+            )
         return user
 
 
 async def get_current_active_user(current_user: User = Depends(get_current_user)):
-    # maybe do something like a check user is retired
+    # Maybe do something like a check user is retired.
     return current_user

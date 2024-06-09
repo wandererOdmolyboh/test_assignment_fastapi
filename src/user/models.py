@@ -4,17 +4,18 @@ from enum import StrEnum
 from sqlalchemy.orm import relationship
 
 from src.database import Base
+from src.user.constant import ENUM_ADMIN, ENUM_MANAGER, ENUM_USER, ENUM_MALE, ENUM_FEMALE
 
 
 class SexEnum(StrEnum):
-    MALE = "Male"
-    FEMALE = "Female"
+    MALE = ENUM_MALE
+    FEMALE = ENUM_FEMALE
 
 
 class RoleEnum(StrEnum):
-    ADMIN = "admin"
-    MANGER = "manager"
-    USER = "user"
+    ADMIN = ENUM_ADMIN
+    MANGER = ENUM_MANAGER
+    USER = ENUM_USER
 
 
 class UserDB(Base):
@@ -27,15 +28,6 @@ class UserDB(Base):
     password = Column(String)
     role = Column(Enum(RoleEnum))
     created_by = Column(Integer, ForeignKey('users.id'), nullable=True)
+
     messages = relationship("DBMessage", back_populates="user")
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "username": self.username,
-            "email": self.email,
-            "sex": self.sex,
-            "password": self.password,
-            "role": self.role,
-            "created_by": self.created_by,
-        }

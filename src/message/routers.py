@@ -1,14 +1,14 @@
 from aiogram import Bot
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.utils.token import TokenValidationError
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from src.message import crud, schemas
-from src.message.schemas import Message
 from src.auth.oauth2 import get_current_active_user
 from src.dependencies import get_async_session
+from src.message import crud, schemas
+from src.message.schemas import Message
 from src.user.models import RoleEnum
 from src.user.schemas import User
 
@@ -16,8 +16,10 @@ router = APIRouter(tags=["messages"])
 
 
 @router.get("/messages/", response_model=list[Message])
-async def get_messages(current_user: User = Depends(get_current_active_user),
-                       db: AsyncSession = Depends(get_async_session)):
+async def get_messages(
+        current_user: User = Depends(get_current_active_user),
+        db: AsyncSession = Depends(get_async_session)
+):
     """
     Retrieve all messages based on the role of the current user.
 
@@ -32,7 +34,6 @@ async def get_messages(current_user: User = Depends(get_current_active_user),
     Returns:
         list[Message]: A list of messages.
     """
-
     if current_user.role == RoleEnum.ADMIN:
         messages = await crud.get_all_messages(db)
     elif current_user.role == RoleEnum.MANGER:
@@ -41,8 +42,10 @@ async def get_messages(current_user: User = Depends(get_current_active_user),
     elif current_user.role == RoleEnum.USER:
         messages = await crud.get_user_all_messages(db, current_user.id)
     else:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                            detail="You do not have permission to perform this action")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to perform this action"
+        )
 
     return messages
 
@@ -71,12 +74,21 @@ async def create_message(
     try:
         bot = Bot(token=created_message.bot_token)
     except TokenValidationError:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid bot token provided")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid bot token provided"
+        )
 
     try:
-        await bot.send_message(chat_id=created_message.chat_id, text=created_message.text)
+        await bot.send_message(
+            chat_id=created_message.chat_id,
+            text=created_message.text
+        )
     except TelegramBadRequest:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid chat id provided")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid chat id provided"
+        )
     finally:
         await bot.session.close()
 

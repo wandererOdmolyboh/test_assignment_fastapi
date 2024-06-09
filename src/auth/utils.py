@@ -1,12 +1,11 @@
+from passlib.context import CryptContext
 
-import jwt
-from jwt import PyJWTError
-from typing import Any, Dict
+password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def get_token_data(token: str, secret_key: str, algorithm: str) -> Dict[str, Any]:
-    try:
-        payload = jwt.decode(token, secret_key, algorithms=[algorithm])
-    except PyJWTError:
-        raise ValueError("Could not decode token. Invalid token or secret key.")
-    return payload
+def hash_password(password: str) -> str:
+    return password_context.hash(password)
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return password_context.verify(plain_password, hashed_password)

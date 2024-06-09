@@ -1,5 +1,5 @@
 import unittest
-from src.auth.hash_password import hash_password
+from src.auth.utils import hash_password
 
 
 class TestHashPassword(unittest.TestCase):

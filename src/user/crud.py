@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.user.models import UserDB, SexEnum, RoleEnum
 from src.user.schemas import UserCreate, User
 
-from src.auth.hash_password import hash_password
+from src.auth.utils import hash_password
 
 
 async def get_users_list(
@@ -22,7 +22,11 @@ async def get_users_list(
     return user_list.scalars().all()
 
 
-async def create_and_assign_role_to_user(db_session: AsyncSession, user: UserCreate, current_user: User | None = None):
+async def create_and_assign_role_to_user(
+        db_session: AsyncSession,
+        user: UserCreate,
+        current_user: User | None = None
+):
     user.password = hash_password(user.password)
 
     if current_user is None or current_user.role in (RoleEnum.MANGER, RoleEnum.USER):

@@ -4,14 +4,16 @@ from src.user.models import SexEnum, RoleEnum
 
 class UserBase(BaseModel):
     """
-    A Pydantic model representing the base attributes of a user. This model includes fields for the user's username,
-    email, password, and sex.
+    A Pydantic model that defines the basic attributes of a user. This model includes fields for the user's username,
+    email, sex, role, and the ID of the user who created this user.
 
     Args:
-        username (str): The user's username.
-        email (str): The user's email.
-        password (str): The user's password.
-        sex (SexEnum): The user's sex. Must be one of the values defined in the SexEnum class.
+        username (str): The username of the user.
+        email (str): The email address of the user.
+        sex (SexEnum): The sex of the user. This must be one of the values defined in the SexEnum class.
+        role (RoleEnum): The role of the user. This must be one of the values defined in the RoleEnum class.
+        created_by (int | None): The ID of the user who created this user. This can be None if the user was not
+        created by another user.
     """
     username: str
     email: str
@@ -22,8 +24,11 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     """
-    A Pydantic model representing the data required to create a new user. This model inherits all fields from UserBase,
-    so it includes fields for the user's username, email, password, and sex.
+    A Pydantic model that defines the data required to create a new user. This model inherits all fields from UserBase,
+    and adds a field for the user's password.
+
+    Args:
+        password (str): The password of the user.
     """
     password: str
 
