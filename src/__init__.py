@@ -1,1 +1,1 @@
-from . import messages, auth, user
+from . import message, auth, user

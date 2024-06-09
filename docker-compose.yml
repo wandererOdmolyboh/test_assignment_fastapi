@@ -24,15 +24,15 @@ services:
     networks:
       - postgres_adminer
 
-  app:
-    build:
-      context: .
-    container_name: test_assignment_fastapi
-    command: [ "/docker/app.sh" ]
-    ports:
-      - "8000:8000"
-    depends_on:
-      - postgres
+#  app:
+#    build:
+#      context: .
+#    container_name: test_assignment_fastapi
+#    command: [ "/docker/app.sh" ]
+#    ports:
+#      - "8000:8000"
+#    depends_on:
+#      - postgres
 
 volumes:
   postgres:

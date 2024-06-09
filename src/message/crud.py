@@ -1,8 +1,8 @@
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.messages.models import DBMessage
-from src.messages.schemas import MessageCreate
+from src.message.models import DBMessage
+from src.message.schemas import MessageCreate
 from src.user.models import UserDB
 from src.user.schemas import User
 

@@ -18,7 +18,7 @@ class RoleEnum(StrEnum):
 
 
 class UserDB(Base):
-    __tablename__ = "users_DTO"
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True)
@@ -26,7 +26,7 @@ class UserDB(Base):
     sex = Column(Enum(SexEnum), nullable=False)
     password = Column(String)
     role = Column(Enum(RoleEnum))
-    created_by = Column(Integer, ForeignKey('users_DTO.id'), nullable=True)
+    created_by = Column(Integer, ForeignKey('users.id'), nullable=True)
     messages = relationship("DBMessage", back_populates="user")
 
     def to_dict(self):

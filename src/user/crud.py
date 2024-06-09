@@ -46,11 +46,15 @@ async def create_user(db_session: AsyncSession, user: UserCreate):
 
     try:
         # TODO
-        result = await db_session.execute(query)
-        user_id = result.scalar_one()
+        user_id = await db_session.execute(query)
         await db_session.commit()
-        response = {**user.model_dump(), "id": user_id}
-        return response
+
+        query = select(UserDB).where(UserDB.id == user_id.scalar_one())
+        result = await db_session.execute(query)
+        created_user = result.scalar_one()
+
+        return created_user
+
     except Exception as e:
         await db_session.rollback()
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")

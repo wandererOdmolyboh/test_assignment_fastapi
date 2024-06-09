@@ -11,6 +11,6 @@ class DBMessage(Base):
     bot_token = Column(String(200), nullable=False)
     chat_id = Column(String(200), nullable=False)
     text = Column(String(500), nullable=False)
-    user_id = Column(Integer, ForeignKey('users_DTO.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
 
     user = relationship("UserDB", back_populates="messages")

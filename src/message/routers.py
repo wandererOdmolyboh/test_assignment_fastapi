@@ -5,8 +5,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from src.messages import crud, schemas
-from src.messages.schemas import Message
+from src.message import crud, schemas
+from src.message.schemas import Message
 from src.auth.oauth2 import get_current_active_user
 from src.dependencies import get_async_session
 from src.user.models import RoleEnum
