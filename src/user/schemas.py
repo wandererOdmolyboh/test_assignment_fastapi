@@ -1,4 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+from pydantic_core.core_schema import ValidationInfo
+
+from src.auth.utils import hash_password
 from src.user.models import SexEnum, RoleEnum
 
 
@@ -31,6 +34,35 @@ class UserCreate(UserBase):
         password (str): The password of the user.
     """
     password: str
+
+    @field_validator('password')
+    def hash_password(cls, password):
+        return hash_password(password)
+
+    @field_validator('role')
+    def set_role(cls, role, info: ValidationInfo):
+        if 'current_user' not in info.data or info.data['current_user'] is None:
+            return RoleEnum.USER
+        current_user = info.data['current_user']
+        if current_user.role == RoleEnum.ADMIN:
+            return role
+        return RoleEnum.USER
+
+    @field_validator('created_by')
+    def set_created_by(cls, created_by, info: ValidationInfo):
+
+        if 'current_user' in info.data:
+            current_user = info.data['current_user']
+            return None if current_user is None else current_user.id
+        return created_by
+
+    class ConfigDict:
+        """
+        A nested class for Pydantic model configuration. The 'from_attributes' attribute is set to True, which means
+        that attributes of the model instance will be used to populate the dictionary when the model is converted to a
+        dictionary using the 'dict()' function.
+        """
+        from_attributes = True
 
 
 class User(UserBase):

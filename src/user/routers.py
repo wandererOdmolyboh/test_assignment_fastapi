@@ -32,7 +32,7 @@ async def create_user(
     """
     try:
         current_user = await crud.get_user_by_id(db, id=user_id)
-        return await crud.create_and_assign_role_to_user(db_session=db, user=user, current_user=current_user)
+        return await crud.create_user(db_session=db, user=user, current_user=current_user)
     except IntegrityError:
         raise HTTPException(status_code=400, detail="User with provided username or email already exists")
 

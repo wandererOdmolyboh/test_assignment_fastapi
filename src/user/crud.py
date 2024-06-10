@@ -22,28 +22,12 @@ async def get_users_list(
     return user_list.scalars().all()
 
 
-async def create_and_assign_role_to_user(
-        db_session: AsyncSession,
-        user: UserCreate,
-        current_user: User | None = None
-):
-    user.password = hash_password(user.password)
-
-    if current_user is None or current_user.role in (RoleEnum.MANGER, RoleEnum.USER):
-        role = RoleEnum.USER
-    else:
-        role = user.role
-    user.role = role
-    user.created_by = None if current_user is None else current_user.id
-    return await create_user(db_session, user)
-
-
-async def create_user(db_session: AsyncSession, user: UserCreate):
+async def create_user(db_session: AsyncSession, user: UserCreate, current_user: User | None = None):
     query = insert(UserDB).values(
         username=user.username,
         email=user.email,
         role=user.role,
-        created_by=user.created_by,
+        created_by=None if current_user is None else current_user.id,
         sex=user.sex.value,
         password=user.password
     ).returning(UserDB.id)
