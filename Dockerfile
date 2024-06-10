@@ -1,8 +1,7 @@
-FROM python:3.10
+FROM python:3.12
 
-RUN apt-get update && apt-get install -y \
-    python3-dev \
-    libpq-dev
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONPATH=/test_assignment_fastapi
 
 RUN mkdir /test_assignment_fastapi
 
@@ -10,11 +9,6 @@ WORKDIR /test_assignment_fastapi
 
 COPY requirements.txt .
 
-RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 COPY . .
-
-COPY docker /docker
-
-RUN chmod a+x docker/*.sh
