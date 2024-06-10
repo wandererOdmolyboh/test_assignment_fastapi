@@ -83,6 +83,10 @@ Make DB migration:
 ```shell
   alembic upgrade head     
 ```
+if you want to fill the database with test data, run the script:
+```shell
+   python3 tests/fill_test_data.py  
+```
 
 Start the server:
 ```shell
