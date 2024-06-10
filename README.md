@@ -30,7 +30,7 @@ python3 -m venv venv
 ````
 or
 ```shell
-python3 -m venv venv 
+python -m venv venv 
 ```
 
 ```shell
