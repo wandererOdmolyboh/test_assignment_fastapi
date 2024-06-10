@@ -1,5 +1,6 @@
 #!/bin/bash
 
+alembic revision --autogenerate -m 'Create table'
 alembic upgrade head
 python tests/fill_test_data.py
 
