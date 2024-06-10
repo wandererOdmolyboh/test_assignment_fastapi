@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from src.auth.oauth2 import get_current_active_user
+from src.auth.oauth2 import get_current_user
 from src.dependencies import get_async_session
 from src.message import crud, schemas
 from src.message.schemas import Message
@@ -17,7 +17,7 @@ router = APIRouter(tags=["messages"])
 
 @router.get("/messages/", response_model=list[Message])
 async def get_messages(
-        current_user: User = Depends(get_current_active_user),
+        current_user: User = Depends(get_current_user),
         db: AsyncSession = Depends(get_async_session)
 ):
     """
@@ -53,7 +53,7 @@ async def get_messages(
 @router.post("/message/", response_model=Message, status_code=status.HTTP_201_CREATED)
 async def create_message(
         message: schemas.MessageCreate,
-        current_user: User = Depends(get_current_active_user),
+        current_user: User = Depends(get_current_user),
         db: AsyncSession = Depends(get_async_session)
 ):
     """

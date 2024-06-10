@@ -3,7 +3,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from src.auth.oauth2 import oauth2_schema, validate_token_from_headers, get_current_user
+from src.auth.oauth2 import validate_token_from_headers, get_current_user
 from src.user.schemas import User, UserCreate
 from src.user import crud
 from src.dependencies import get_async_session

@@ -10,7 +10,6 @@ from starlette import status
 from src.config import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, JWT_SECRET
 from src.dependencies import get_async_session
 from src.user import crud as user_crud
-from src.user.schemas import User
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="/task_2/login")
 
@@ -63,8 +62,3 @@ async def get_current_user(
                 detail="User not found"
             )
         return user
-
-
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
-    # Maybe do something like a check user is retired.
-    return current_user
