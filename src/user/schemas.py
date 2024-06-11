@@ -48,14 +48,6 @@ class UserCreate(UserBase):
             return role
         return RoleEnum.USER
 
-    @field_validator('created_by')
-    def set_created_by(cls, created_by, info: ValidationInfo):
-
-        if 'current_user' in info.data:
-            current_user = info.data['current_user']
-            return None if current_user is None else current_user.id
-        return created_by
-
     class ConfigDict:
         """
         A nested class for Pydantic model configuration. The 'from_attributes' attribute is set to True, which means

@@ -2,10 +2,8 @@ from fastapi import HTTPException
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.user.models import UserDB, SexEnum, RoleEnum
+from src.user.models import UserDB, SexEnum
 from src.user.schemas import UserCreate, User
-
-from src.auth.utils import hash_password
 
 
 async def get_users_list(
@@ -33,7 +31,6 @@ async def create_user(db_session: AsyncSession, user: UserCreate, current_user: 
     ).returning(UserDB.id)
 
     try:
-        # TODO
         user_id = await db_session.execute(query)
         await db_session.commit()
 
